@@ -806,6 +806,9 @@ bool ExecutableExistsInPath(Environment* env,
 #if !BUILDFLAG(IS_APPLE)
 // This is implemented in file_util_apple.mm for Mac.
 bool GetTempDir(FilePath* path) {
+#if BUILDFLAG(IS_COBALT)
+  return PathService::Get(DIR_TEMP, path);
+#else
   const char* tmp = getenv("TMPDIR");
   if (tmp) {
     *path = FilePath(tmp);
@@ -818,6 +821,7 @@ bool GetTempDir(FilePath* path) {
   *path = FilePath("/tmp");
   return true;
 #endif
+#endif  // BUILDFLAG(IS_COBALT)
 }
 #endif  // !BUILDFLAG(IS_APPLE)
 
