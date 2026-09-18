@@ -1108,7 +1108,7 @@ Comprova les contrasenyes sempre que vulguis al <ph name="GOOGLE_PASSWORD_MANAGE
 <translation id="1734824808160898225">És possible que <ph name="PRODUCT_NAME" /> no pugui actualitzar-se tot sol</translation>
 <translation id="1735983780784385591">Importats de Linux</translation>
 <translation id="173628468822554835">D'acord. De manera predeterminada, els llocs web nous que visitis no t'enviaran notificacions.</translation>
-<translation id="1737968601308870607">Arxiva l'error</translation>
+<translation id="1737968601308870607">Envia l'error</translation>
 <translation id="1740414789702358061"><ph name="SITE_ACCESS" />. Selecciona per canviar els permisos dels llocs web.</translation>
 <translation id="1741190788710022490">Càrrega intel·ligent</translation>
 <translation id="174123615272205933">Personalitzats</translation>
@@ -1269,7 +1269,7 @@ Comprova les contrasenyes sempre que vulguis al <ph name="GOOGLE_PASSWORD_MANAGE
 <translation id="1842766183094193446">Confirmes que vols activar el mode de demostració?</translation>
 <translation id="1843048149176045210">Copia l'enllaç de baixada</translation>
 <translation id="1843347690926158494">Cerca en aquesta pestanya amb Google Lens</translation>
-<translation id="1845060436536902492">El lector de pantalla de ChromeOS Flex, ChromeVox, l'utilitzen principalment persones invidents o amb poca visió per llegir el text que es mostra en pantalla amb un sintetitzador de veu o una pantalla braille. Prem la barra espaiadora per activar ChromeVox. Quan ChromeVox estigui activat, podràs fer una visita ràpida.</translation>
+<translation id="1845060436536902492">El lector de pantalla de ChromeOS Flex, ChromeVox, l'utilitzen principalment persones amb ceguesa o poca visió per llegir el text que es mostra en pantalla amb un sintetitzador de veu o una pantalla braille. Prem la barra espaiadora per activar ChromeVox. Quan ChromeVox estigui activat, podràs fer una visita ràpida.</translation>
 <translation id="1845727111305721124">Amb permís per reproduir so</translation>
 <translation id="1846308012215045257">Prem Ctrl+clic per executar <ph name="PLUGIN_NAME" /></translation>
 <translation id="1848219224579402567">Tanca la sessió quan es tanqui la tapa</translation>
@@ -3503,7 +3503,7 @@ Pots gestionar la configuració d'aquest compte instal·lant l'aplicació Family
 <translation id="3390442085511866400">Desa el &amp;fotograma com a...</translation>
 <translation id="3390530051434634135">Nota: <ph name="NOTE" /></translation>
 <translation id="3390740059150071453">Mirar a l'esquerra</translation>
-<translation id="3391721320619127327">El lector de pantalla de ChromeOS Flex, ChromeVox, l'utilitzen principalment persones invidents o amb poca visió per llegir el text que es mostra en pantalla amb un sintetitzador de veu o una pantalla braille. Mantén premudes les dues tecles de volum durant cinc segons per activar ChromeVox. Quan ChromeVox estigui activat, podràs fer una visita ràpida.</translation>
+<translation id="3391721320619127327">El lector de pantalla de ChromeOS Flex, ChromeVox, l'utilitzen principalment persones amb ceguesa o poca visió per llegir el text que es mostra en pantalla amb un sintetitzador de veu o una pantalla braille. Mantén premudes les dues tecles de volum durant cinc segons per activar ChromeVox. Quan ChromeVox estigui activat, podràs fer una visita ràpida.</translation>
 <translation id="3393554941209044235">Anàlisi de documents a Chrome</translation>
 <translation id="3394072120086516913">PC amb connexió per cable i dispositiu d'emissió amb connexió Wi-Fi</translation>
 <translation id="3394850431319394743">Es permet que utilitzin identificadors per reproduir contingut protegit</translation>
@@ -4873,7 +4873,7 @@ Pots gestionar la configuració d'aquest compte instal·lant l'aplicació Family
 <translation id="4298660926525614540">Noms d'emmagatzematge extraïble</translation>
 <translation id="4299022904780065004">Finestra d'&amp;incògnit nova</translation>
 <translation id="4300272766492248925">Obre l'aplicació</translation>
-<translation id="4301231341924904092">Canvia per mi</translation>
+<translation id="4301231341924904092">Canvia-la per mi</translation>
 <translation id="4301671483919369635">Aquesta pàgina té permís per editar fitxers</translation>
 <translation id="4301697210743228350">{COUNT,plural, =1{# contacte no està disponible. Per fer servir <ph name="FEATURE_NAME" /> amb aquesta persona, afegeix als teus contactes l'adreça electrònica associada al seu Compte de Google.}other{# contactes no estan disponibles. Per fer servir <ph name="FEATURE_NAME" /> amb aquestes persones, afegeix als teus contactes les adreces electròniques associades als seus Comptes de Google.}}</translation>
 <translation id="4303079906735388947">Configura un PIN nou per a la clau de seguretat</translation>
@@ -6197,7 +6197,7 @@ Fes servir Ctrl+Alt+disminueix la brillantor per reduir el zoom.</translation>
 <translation id="5233231016133573565">ID de procés</translation>
 <translation id="5233638681132016545">Pestanya nova</translation>
 <translation id="5233736638227740678">&amp;Enganxa</translation>
-<translation id="5234523649284990414">El lector de pantalla de ChromeOS, ChromeVox, l'utilitzen principalment persones invidents o amb poca visió per llegir el text que es mostra en pantalla amb un sintetitzador de veu o una pantalla braille. Prem la barra espaiadora per activar ChromeVox. Quan ChromeVox estigui activat, podràs fer una visita ràpida.</translation>
+<translation id="5234523649284990414">El lector de pantalla de ChromeOS, ChromeVox, l'utilitzen principalment persones amb ceguesa o poca visió per llegir el text que es mostra en pantalla amb un sintetitzador de veu o una pantalla braille. Prem la barra espaiadora per activar ChromeVox. Quan ChromeVox estigui activat, podràs fer una visita ràpida.</translation>
 <translation id="5234764350956374838">Ignora</translation>
 <translation id="5235050375939235066">Vols desinstal·lar l'aplicació?</translation>
 <translation id="523505283826916779">Configuració d'accessibilitat</translation>
@@ -9401,7 +9401,7 @@ Tens # contrasenyes més en perill. El gestor de contrasenyes de Google recomana
 <translation id="747507174130726364">{NUM_DAYS,plural, =1{Cal que tornis el dispositiu immediatament}other{Torna el dispositiu <ph name="DEVICE_TYPE" /> en un termini de {NUM_DAYS} dies}}</translation>
 <translation id="747557463733380256">Informació sobre com es gestiona el navegador</translation>
 <translation id="7475671414023905704">URL de contrasenya perduda de Netscape</translation>
-<translation id="7475742997309661417">El lector de pantalla de ChromeOS, ChromeVox, l'utilitzen principalment persones invidents o amb poca visió per llegir el text que es mostra en pantalla amb un sintetitzador de veu o una pantalla braille. Mantén premudes les dues tecles de volum durant cinc segons per activar ChromeVox. Quan ChromeVox estigui activat, podràs fer una visita ràpida.</translation>
+<translation id="7475742997309661417">El lector de pantalla de ChromeOS, ChromeVox, l'utilitzen principalment persones amb ceguesa o poca visió per llegir el text que es mostra en pantalla amb un sintetitzador de veu o una pantalla braille. Mantén premudes les dues tecles de volum durant cinc segons per activar ChromeVox. Quan ChromeVox estigui activat, podràs fer una visita ràpida.</translation>
 <translation id="7476454130948140105">No hi ha prou bateria per fer l'actualització (<ph name="BATTERY_PERCENT" />%)</translation>
 <translation id="7476989672001283112">Permisos bloquejats automàticament: <ph name="PERMISSION" /> i <ph name="COUNT" /> més</translation>
 <translation id="7477460499687558352">Tria el perfil d'eSIM que vulguis baixar</translation>
@@ -10411,7 +10411,7 @@ Deseu el fitxer de clau en una ubicació segura. El necessitareu per crear versi
 <translation id="8146177459103116374">Si ja esteu registrat en aquest dispositiu, podeu <ph name="LINK2_START" />iniciar la sessió com a usuari existent<ph name="LINK2_END" />.</translation>
 <translation id="8146287226035613638">Afegeix i classifica els teus idiomes preferits. Quan sigui possible, els llocs web es mostraran en aquests idiomes. Aquestes preferències se sincronitzen amb la configuració del navegador. <ph name="BEGIN_LINK_LEARN_MORE" />Més informació<ph name="END_LINK_LEARN_MORE" /></translation>
 <translation id="8146793085009540321">No s'ha pogut iniciar la sessió. Contacteu amb l'administrador o torneu-ho a provar.</translation>
-<translation id="8147346945017130012">Ajuda a millorar les funcions i el rendiment de Chrome i Chrome OS enviant automàticament informes d'error i dades de diagnòstic i d'ús a Google.</translation>
+<translation id="8147346945017130012">Ajuda a millorar les funcions i el rendiment de Chrome i ChromeOS enviant automàticament informes d'error i dades de diagnòstic i d'ús a Google.</translation>
 <translation id="8147900440966275470">S'ha trobat <ph name="NUM" /> pestanya</translation>
 <translation id="814870937590541483">Més accions per als fitxers de Google Drive</translation>
 <translation id="8148760431881541277">Limita l'inici de sessió</translation>

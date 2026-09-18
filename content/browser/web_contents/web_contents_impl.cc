@@ -179,6 +179,7 @@
 #include "content/public/common/content_switches.h"
 #include "content/public/common/referrer_type_converters.h"
 #include "content/public/common/url_constants.h"
+#include "content/public/common/widget_type.h"
 #include "ipc/constants.mojom.h"
 #include "media/base/media_switches.h"
 #include "net/base/url_util.h"
@@ -2016,6 +2017,17 @@ RenderWidgetHostView* WebContentsImpl::GetTopLevelRenderWidgetHostView() {
     return GetOuterWebContents()->GetTopLevelRenderWidgetHostView();
   }
   return GetRenderManager()->GetRenderWidgetHostView();
+}
+
+std::vector<RenderWidgetHostView*> WebContentsImpl::GetPopupWidgets() {
+  std::vector<RenderWidgetHostView*> result;
+  for (const auto& [_, host] : created_widgets_) {
+    RenderWidgetHostViewBase* view = host->GetView();
+    if (view && view->GetWidgetType() == WidgetType::kPopup) {
+      result.push_back(view);
+    }
+  }
+  return result;
 }
 
 RenderWidgetHost* WebContentsImpl::FindWidgetAtPoint(const gfx::PointF& point) {
@@ -7173,10 +7185,20 @@ base::ScopedClosureRunner WebContentsImpl::ForSecurityDropFullscreen(
   // upstream contents. Drop that WebContents out of fullscreen if it does. This
   // is theoretically quadratic-ish (fullscreen contentses x each one's opener
   // length) but neither of those is expected to ever be a large number.
-  auto fullscreen_set_copy = *FullscreenContentsSet(GetBrowserContext());
-  for (WebContentsImpl* fullscreen_contents : fullscreen_set_copy) {
-    if (is_fullscreen(fullscreen_contents, display_id)) {
-      auto opener_contentses = GetAllOpeningWebContents(fullscreen_contents);
+  std::vector<base::WeakPtr<WebContentsImpl>> fullscreen_contents_list;
+  for (WebContentsImpl* fullscreen_contents :
+       *FullscreenContentsSet(GetBrowserContext())) {
+    fullscreen_contents_list.push_back(
+        fullscreen_contents->weak_factory_.GetWeakPtr());
+  }
+
+  for (auto& fullscreen_contents : fullscreen_contents_list) {
+    if (!fullscreen_contents) {
+      continue;
+    }
+    if (is_fullscreen(fullscreen_contents.get(), display_id)) {
+      auto opener_contentses =
+          GetAllOpeningWebContents(fullscreen_contents.get());
       if (opener_contentses.count(this)) {
         fullscreen_contents->ExitFullscreen(true);
       }
@@ -7190,29 +7212,41 @@ base::ScopedClosureRunner WebContentsImpl::ForSecurityDropFullscreen(
   // any request to enter fullscreen will have the upstream of the WebContents
   // checked. (See CanEnterFullscreenMode().)
 
-  std::vector<base::WeakPtr<WebContentsImpl>> blocked_contentses;
+  std::vector<base::WeakPtr<WebContentsImpl>> blocked_contents_list;
+  std::vector<base::WeakPtr<WebContentsImpl>> openers;
+  for (WebContentsImpl* opener : GetAllOpeningWebContents(this)) {
+    openers.push_back(opener->weak_factory_.GetWeakPtr());
+  }
 
-  for (auto* opener : GetAllOpeningWebContents(this)) {
-    if (is_fullscreen(opener, display_id)) {
+  for (auto& opener : openers) {
+    if (!opener) {
+      continue;
+    }
+
+    if (is_fullscreen(opener.get(), display_id)) {
       opener->ExitFullscreen(true);
+    }
+
+    if (!opener) {
+      continue;
     }
 
     // ...block the WebContents from entering fullscreen until further notice.
     ++opener->fullscreen_blocker_count_;
-    blocked_contentses.push_back(opener->weak_factory_.GetWeakPtr());
+    blocked_contents_list.push_back(opener);
   }
 
   return base::ScopedClosureRunner(base::BindOnce(
-      [](std::vector<base::WeakPtr<WebContentsImpl>> blocked_contentses) {
+      [](std::vector<base::WeakPtr<WebContentsImpl>> blocked_contents_list) {
         for (base::WeakPtr<WebContentsImpl>& web_contents :
-             blocked_contentses) {
+             blocked_contents_list) {
           if (web_contents) {
             DCHECK_GT(web_contents->fullscreen_blocker_count_, 0);
             --web_contents->fullscreen_blocker_count_;
           }
         }
       },
-      std::move(blocked_contentses)));
+      std::move(blocked_contents_list)));
 }
 
 void WebContentsImpl::ResumeLoadingCreatedWebContents() {
@@ -7631,6 +7665,14 @@ input::TouchEmulator* WebContentsImpl::GetTouchEmulator(
   return touch_emulator_.get();
 }
 
+void WebContentsImpl::CancelAutoscroll(input::RenderWidgetHostViewInput* view) {
+  auto* view_base = static_cast<RenderWidgetHostViewBase*>(view);
+  auto* rwhi = RenderWidgetHostImpl::From(view_base->GetRenderWidgetHost());
+  if (rwhi) {
+    rwhi->AutoscrollEnd();
+  }
+}
+
 void WebContentsImpl::DidNavigateMainFramePreCommit(
     NavigationHandle* navigation_handle,
     bool navigation_is_within_page) {
@@ -7940,11 +7982,15 @@ void WebContentsImpl::ViewSource(RenderFrameHostImpl* frame) {
 
   // Any new WebContents opened while this WebContents is in fullscreen can be
   // used to confuse the user, so drop fullscreen.
+  base::WeakPtr<RenderFrameHostImpl> weak_frame = frame->GetWeakPtr();
   base::ScopedClosureRunner fullscreen_block =
       ForSecurityDropFullscreen(/*display_id=*/display::kInvalidDisplayId);
   // The new view source contents will be independent of this contents, so
   // release the fullscreen block.
   fullscreen_block.RunAndReset();
+  if (!weak_frame) {
+    return;
+  }
 
   // We intentionally don't share the SiteInstance with the original frame so
   // that view source has a consistent process model and always ends up in a new
@@ -7973,7 +8019,8 @@ void WebContentsImpl::ViewSource(RenderFrameHostImpl* frame) {
   // iframe, so preserve the IsolationInfo from the origin frame, to use the
   // same network shard and increase chances of a cache hit.
   navigation_entry->set_isolation_info(
-      frame->ComputeIsolationInfoForNavigation(navigation_entry->GetURL()));
+      weak_frame->ComputeIsolationInfoForNavigation(
+          navigation_entry->GetURL()));
 
   // Do not restore scroller position.
   // TODO(creis, lukasza, arthursonzogni): Do not reuse the original PageState,
@@ -8773,8 +8820,12 @@ void WebContentsImpl::RunJavaScriptDialog(
 
   // Running a dialog causes an exit to webpage-initiated fullscreen.
   // http://crbug.com/728276
+  base::WeakPtr<RenderFrameHostImpl> weak_rfh = render_frame_host->GetWeakPtr();
   base::ScopedClosureRunner fullscreen_block =
       ForSecurityDropFullscreen(/*display_id=*/display::kInvalidDisplayId);
+  if (!fullscreen_block || !weak_rfh || !weak_rfh->IsActive()) {
+    return;
+  }
 
   auto callback = base::BindOnce(
       &WebContentsImpl::OnDialogClosed, weak_factory_.GetWeakPtr(),
@@ -8906,8 +8957,12 @@ void WebContentsImpl::RunBeforeUnloadConfirm(
 
   // Running a dialog causes an exit to webpage-initiated fullscreen.
   // http://crbug.com/728276
+  base::WeakPtr<RenderFrameHostImpl> weak_rfh = render_frame_host->GetWeakPtr();
   base::ScopedClosureRunner fullscreen_block =
       ForSecurityDropFullscreen(/*display_id=*/display::kInvalidDisplayId);
+  if (!fullscreen_block || !weak_rfh || !weak_rfh->IsActive()) {
+    return;
+  }
 
   auto callback = base::BindOnce(
       &WebContentsImpl::OnDialogClosed, weak_factory_.GetWeakPtr(),
@@ -8986,7 +9041,7 @@ void WebContentsImpl::RunBeforeUnloadConfirm(
 
 void WebContentsImpl::RunFileChooser(
     base::WeakPtr<FileChooserImpl> file_chooser,
-    RenderFrameHost* render_frame_host,
+    RenderFrameHostImpl* render_frame_host,
     scoped_refptr<FileChooserImpl::FileSelectListenerImpl> listener,
     const blink::mojom::FileChooserParams& params) {
   OPTIONAL_TRACE_EVENT1("content", "WebContentsImpl::RunFileChooser",
@@ -9010,13 +9065,19 @@ void WebContentsImpl::RunFileChooser(
 
   // Any explicit focusing of another window while this WebContents is in
   // fullscreen can be used to confuse the user, so drop fullscreen.
+  base::WeakPtr<RenderFrameHostImpl> weak_rfh =
+      render_frame_host ? render_frame_host->GetWeakPtr() : nullptr;
   base::ScopedClosureRunner fullscreen_block =
       ForSecurityDropFullscreen(/*display_id=*/display::kInvalidDisplayId);
+  if (!fullscreen_block ||
+      (render_frame_host && (!weak_rfh || !weak_rfh->IsActive()))) {
+    return;
+  }
   listener->SetFullscreenBlock(std::move(fullscreen_block));
 
   if (delegate_) {
     active_file_chooser_ = std::move(file_chooser);
-    delegate_->RunFileChooser(render_frame_host, std::move(listener), params);
+    delegate_->RunFileChooser(weak_rfh.get(), std::move(listener), params);
     std::move(cancel_chooser).Cancel();
   }
 }

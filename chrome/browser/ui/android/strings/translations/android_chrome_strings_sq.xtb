@@ -1659,7 +1659,7 @@ Për ta ndryshuar këtë cilësim, <ph name="BEGIN_LINK" />fshi të dhënat e Ch
 <translation id="7944772052836377867">Sinkronizimi ka nevojë të verifikojë që je ti</translation>
 <translation id="7951102827450076904">Hap gjithmonë skedarët e shkarkuar PDF</translation>
 <translation id="7952479614398473176">Për të hapur një dritare të re, zvogëlo numrin total të dritareve aktive në <ph name="MAX_WINDOW_COUNT_MINUS_ONE" /> ose më pak.</translation>
-<translation id="7957413488482743710">Një kartë virtuale fsheh kartën tënde aktuale për të të mbrojtur nga mashtrimi i mundshëm. <ph name="BEGIN_LINK1" />Mëso më shumë rreth kartave virtuale<ph name="END_LINK1" /></translation>
+<translation id="7957413488482743710">Një kartë virtuale fsheh kartën tënde fizike për të të mbrojtur nga mashtrimi i mundshëm. <ph name="BEGIN_LINK1" />Mëso më shumë rreth kartave virtuale<ph name="END_LINK1" /></translation>
 <translation id="7959485987650214982">Skedat në këtë pajisje</translation>
 <translation id="7961926449547174351">Ke çaktivizuar qasjen te "Hapësira ruajtëse". Shko te "Cilësimet" për ta aktivizuar atë.</translation>
 <translation id="7963646190083259054">Shitësi:</translation>
@@ -1750,7 +1750,7 @@ Për ta ndryshuar këtë cilësim, <ph name="BEGIN_LINK" />fshi të dhënat e Ch
 <translation id="8271267069224406035">Raporto si përmbajtje të bezdisshme</translation>
 <translation id="8277710303010772444">Fillo kërkimin</translation>
 <translation id="8279945625179116733">Siguruar nga <ph name="APP_NAME" /></translation>
-<translation id="8281886186245836920">Kapërce</translation>
+<translation id="8281886186245836920">Anashkalo</translation>
 <translation id="8282297628636750033">Zbato temën e errët për sajtet</translation>
 <translation id="8282950411412455249">Shko te cilësimet e sigurisë</translation>
 <translation id="8288688997999490824">{NUM_WINDOWS,plural, =1{Mbyll 1 dritare të fshehtë}other{Mbyll # dritare të fshehta}}</translation>

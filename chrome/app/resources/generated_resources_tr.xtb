@@ -4373,7 +4373,7 @@ Sunucunun mesajı: <ph name="SERVER_MSG" /></translation>
 <translation id="394930357226768495">Kuruluşunuzdan gelen önerileri ve sonuçları gösterin</translation>
 <translation id="394984172568887996">IE'den Aktarıldı</translation>
 <translation id="3949999964543783947">Dosyaları daha güvenli bir şekilde indirmek için <ph name="IDS_DOWNLOAD_BUBBLE_SUBPAGE_SUMMARY_WARNING_SAFE_BROWSING_SETTING_LINK" /></translation>
-<translation id="3950479158728806902">Daha hızlı oturum açmak için otomatik olarak geçiş anahtarı oluşturun</translation>
+<translation id="3950479158728806902">Daha hızlı oturum açmak için otomatik olarak geçiş anahtarı oluştur</translation>
 <translation id="3950755269510650933">Gemini'ın deneyiminizi kişiselleştirmek için kullanabileceği bilgileri yönetin</translation>
 <translation id="3950820424414687140">Oturum açın</translation>
 <translation id="3950841222883198950">Sesle yazma</translation>
@@ -8712,7 +8712,7 @@ Sızdırılmış # şifreniz daha var. Google Şifre Yöneticisi bu şifreleri h
 <translation id="6985607387932385770">Yazıcılar</translation>
 <translation id="6988094684494323731">Linux kapsayıcısı başlatılıyor</translation>
 <translation id="6988403677482707277">Sekme, sekme şeridinin başına taşındı</translation>
-<translation id="6988572888918530647">Google Hesabınızı Yönetin</translation>
+<translation id="6988572888918530647">Google Hesabınızı yönetin</translation>
 <translation id="6989274756151920076">Burada kal</translation>
 <translation id="6991665348624301627">Bir hedef seç</translation>
 <translation id="6992554835374084304">Gelişmiş yazım denetimini etkinleştirin</translation>

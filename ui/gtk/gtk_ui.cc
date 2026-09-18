@@ -23,6 +23,7 @@
 #include "base/containers/flat_map.h"
 #include "base/debug/leak_annotations.h"
 #include "base/environment.h"
+#include "base/files/file_path.h"
 #include "base/functional/bind.h"
 #include "base/logging.h"
 #include "base/nix/mime_util_xdg.h"
@@ -295,6 +296,24 @@ bool IsValidSchema(ui::LinuxUiBackend backend) {
   return true;
 }
 
+bool IsValidIconThemeName(const std::string& theme) {
+  base::FilePath theme_path(theme);
+  return !theme.empty() && theme != "." && !theme_path.IsAbsolute() &&
+         !theme_path.ReferencesParent() && theme_path.BaseName() == theme_path;
+}
+
+std::string GetIconThemeName() {
+  gchar* theme = nullptr;
+  g_object_get(gtk_settings_get_default(), "gtk-icon-theme-name", &theme,
+               nullptr);
+  std::string theme_string;
+  if (theme) {
+    theme_string = theme;
+    g_free(theme);
+  }
+  return theme_string;
+}
+
 }  // namespace
 
 GtkUi::GtkUi() : window_frame_actions_() {
@@ -364,6 +383,10 @@ bool GtkUi::Initialize() {
   };
 
   GtkSettings* settings = gtk_settings_get_default();
+  // Pin `gtk-modules` to an empty string with APPLICATION source priority
+  // to prevent XSETTINGS updates from loading GTK modules.
+  g_object_set(settings, "gtk-modules", "", nullptr);
+  SanitizeIconThemeName();
   connect(settings, "notify::gtk-theme-name", &GtkUi::OnThemeChanged);
   connect(settings, "notify::gtk-icon-theme-name", &GtkUi::OnThemeChanged);
   connect(settings, "notify::gtk-application-prefer-dark-theme",
@@ -516,6 +539,10 @@ void GtkUi::GetInactiveSelectionFgColor(SkColor* color) const {
 gfx::Image GtkUi::GetIconForContentType(const std::string& content_type,
                                         int dip_size,
                                         float scale) const {
+  if (!IsValidIconThemeName(GetIconThemeName())) {
+    return gfx::Image();
+  }
+
   // This call doesn't take a reference.
   GtkIconTheme* theme = GetDefaultIconTheme();
 
@@ -783,6 +810,16 @@ std::string GtkUi::GetCursorThemeName() {
   return theme_string;
 }
 
+bool GtkUi::SanitizeIconThemeName() {
+  std::string theme = GetIconThemeName();
+  if (!IsValidIconThemeName(theme)) {
+    g_object_set(gtk_settings_get_default(), "gtk-icon-theme-name", "hicolor",
+                 nullptr);
+    return true;
+  }
+  return false;
+}
+
 int GtkUi::GetCursorThemeSize() {
   gint size = 0;
   g_object_get(gtk_settings_get_default(), "gtk-cursor-theme-size", &size,
@@ -833,6 +870,9 @@ gfx::Size GtkUi::GetPdfPaperSize(printing::PrintingContextLinux* context) {
 #endif
 
 void GtkUi::OnThemeChanged(GtkSettings* settings, GtkParamSpec* param) {
+  if (SanitizeIconThemeName()) {
+    return;  // Exit early; modifying the setting re-triggered this function
+  }
   colors_.clear();
   custom_frame_colors_.clear();
   native_frame_colors_.clear();

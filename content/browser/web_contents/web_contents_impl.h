@@ -406,6 +406,7 @@ class CONTENT_EXPORT WebContentsImpl
   RenderWidgetHostView* GetRenderWidgetHostView() override;
   RenderWidgetHostView* GetTopLevelRenderWidgetHostView() override;
   RenderWidgetHost* FindWidgetAtPoint(const gfx::PointF& point) override;
+  std::vector<RenderWidgetHostView*> GetPopupWidgets() override;
   void ClosePage() override;
   std::optional<SkColor> GetThemeColor() override;
   std::optional<SkColor> GetBackgroundColor() override;
@@ -1289,6 +1290,7 @@ class CONTENT_EXPORT WebContentsImpl
 
   //  RenderWidgetHostInputEventRouter::Delegate -------------------------------
   input::TouchEmulator* GetTouchEmulator(bool create_if_necessary) override;
+  void CancelAutoscroll(input::RenderWidgetHostViewInput* view) override;
 
   // Invoked before a form repost warning is shown.
   void NotifyBeforeFormRepostWarningShow() override;
@@ -1461,7 +1463,7 @@ class CONTENT_EXPORT WebContentsImpl
   // Called when a file selection is to be done.
   void RunFileChooser(
       base::WeakPtr<FileChooserImpl> file_chooser,
-      RenderFrameHost* render_frame_host,
+      RenderFrameHostImpl* render_frame_host,
       scoped_refptr<FileChooserImpl::FileSelectListenerImpl> listener,
       const blink::mojom::FileChooserParams& params);
 
