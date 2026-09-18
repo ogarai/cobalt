@@ -10,7 +10,8 @@ on:
         type: number
 
 permissions:
-  contents: read
+  contents: write
+  pull-requests: write
 
 jobs:
   autoroll:
@@ -21,7 +22,8 @@ jobs:
       GIT_COMMITTER_NAME: "cobalt-github-releaser-bot"
       GIT_COMMITTER_EMAIL: "cobalt-github-releaser-bot@google.com"
     permissions:
-      contents: read
+      contents: write
+      pull-requests: write
     defaults:
       run:
         working-directory: src
@@ -39,7 +41,7 @@ jobs:
           path: src
           ref: ${{ matrix.branch.target }}
           fetch-depth: 1000
-          token: ${{ secrets.CHERRY_PICK_TOKEN }}
+          token: ${{ secrets.CHERRY_PICK_TOKEN || github.token }}
 
       - name: Prepare Cherry Pick Branch
         env:
@@ -69,7 +71,7 @@ jobs:
       - name: Get Existing PR Info
         id: pr_info
         env:
-          GITHUB_TOKEN: ${{ secrets.CHERRY_PICK_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.CHERRY_PICK_TOKEN || github.token }}
           SOURCE_BRANCH: ${{ matrix.branch.source }}
           TARGET_BRANCH: ${{ matrix.branch.target }}
         run: |
@@ -113,7 +115,7 @@ jobs:
         env:
           SOURCE_BRANCH: ${{ matrix.branch.source }}
           TARGET_BRANCH: ${{ matrix.branch.target }}
-          GITHUB_TOKEN: ${{ secrets.CHERRY_PICK_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.CHERRY_PICK_TOKEN || github.token }}
           PR_LINKS: ${{ steps.autoroll.outputs.pr_links }}
           AUTOROLL_FILE: ${{ matrix.branch.autoroll }}
         run: |
